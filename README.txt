@@ -1,0 +1,1 @@
+Implementation of the Huffman Coding Algorithm for compressing text files.
