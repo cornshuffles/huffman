@@ -1,8 +1,12 @@
 #ifndef COMPRESS_H
 #define COMPRESS_H
 
-typedef struct uint24_t{
-    unsigned int data: 24;
-}uint24_t;
+#include <map>
+#include <string>
 
+// Prototype functions
+std::map<std::string,int>* readInputFile();
+std::map<std::string, std::string>* getHuffmanCodes(std::map<std::string, int>* stringFreq);
+void decompress();
+void writeCompressedFile(std::map<std::string, std::string>* stringCode);
 #endif

@@ -1,22 +1,16 @@
 /*
 AUTHOR: Vladislav Nikolic
-STID: 1079
 DATE: November 28, 2020
-CLASS: CS315-001 Fall 2020
-PROJECT: final project
 COMPILATION: g++ *.cpp
 SYNOPSIS: Once compiled, execute the program using ./a.out - replace "a.out" with whatever the name of the executable you generated when compiling is
-COMPUTER: VM allocated by the CS department
 ALGORITHM: This program implements the Huffman code generating algorithm
 COMPLEXITY: O(nlog(n)) - where n is the number of unique elements
 BUGS: None known
 REFERENCES: https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/ - This code is a modified version of the code available here
-NOTES: None to report
+NOTES: The input, compressed, and decompressed file names are specified by macros in compress.cpp
 */
 
 #include "huffman.h"
-#include <string>
-#include <map>
 
 using namespace std;
 
@@ -189,17 +183,6 @@ string printArr(int arr[], int n){
     for(i = 0; i < n; i++){
         code += to_string(arr[i]);
     }
-    // Pad all codes to byte lengths
-    while(code.length() < 8){
-        code += '0';
-    }
-    while(code.length() > 8 && code.length() < 16){
-        code += '0';
-    }
-    while(code.length() > 16 && code.length() < 24){
-        code += '0';
-    }
-
     return code;
 }
 
@@ -344,4 +327,50 @@ map<string,string>* HuffmanCodes(string data[], int freq[], int size){
     int arr[size], top = 0;
     map<string,string>* stringCode = getCodes(root, arr, top);
     return stringCode;
+}
+
+/*------------------------------------------------------*
+ * Function:    buildHuffmanTreeFromCodes               *
+ * Params:      stringCode - strings/codes to insert    *
+ *                                                      *
+ * Returns:     MinHeapNode* - pointer to head of       *
+ *                             created Huffman Tree     *
+ *                                  their codes         *
+ *                                                      *
+ * Description: Builds a huffman tree given elements and*
+ *              codes                                   *
+ * -----------------------------------------------------*/
+MinHeapNode* buildHuffmanTreeFromCodes(vector<pair<string, string>> stringCode){
+    MinHeapNode *huffmanTree = new MinHeapNode();
+    huffmanTree->left = NULL;
+    huffmanTree->right = NULL;
+    MinHeapNode *head;
+    head = huffmanTree;
+
+    for(auto elementIterator = stringCode.begin(); elementIterator != stringCode.end(); elementIterator++){
+        for(int i = 0; i < elementIterator->second.length(); i++){
+            if(elementIterator->second[i] == '1'){
+                if(head->right == NULL){
+                    MinHeapNode *newRightNode = new MinHeapNode();
+                    newRightNode->left = NULL;
+                    newRightNode->right = NULL;
+                    head->right = newRightNode;
+                }
+                head = head->right;
+            }
+            else{
+                if(head->left == NULL){
+                    MinHeapNode *newLeftNode = new MinHeapNode();
+                    newLeftNode->left = NULL;
+                    newLeftNode->right = NULL;
+                    head->left = newLeftNode;
+                }
+                head = head->left;
+            }
+        }
+        head->data = elementIterator->first;
+        head = huffmanTree;
+    }
+
+    return huffmanTree;
 }

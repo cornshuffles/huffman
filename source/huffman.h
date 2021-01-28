@@ -2,6 +2,7 @@
 #define HUFFMAN_H
 
 #include <string>
+#include <vector>
 #include <map>
 
 // Huffman Tree node struct
@@ -26,5 +27,7 @@ struct MinHeap{
 
 // Prototype functions
 std::map<std::string,std::string>* HuffmanCodes(std::string data[], int freq[], int size);
+MinHeapNode* buildHuffmanTreeFromCodes(std::vector<std::pair<std::string, std::string>> stringCode);
+int isLeaf(struct MinHeapNode* root);
 
 #endif
