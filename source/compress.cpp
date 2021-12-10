@@ -12,7 +12,6 @@ NOTES: The input, compressed, and decompressed file names are specified by macro
 
 #include <fstream>
 #include <iostream>
-#include <cmath> // pow()
 #include "huffman.h"
 #include "compress.h"
 
@@ -155,7 +154,7 @@ void writeCode(string code, uint8_t *writeBuffer, uint8_t *bufferIndex, ofstream
     else{
         while(codeIndex < code.length()){
             if(code[codeIndex] == '1'){
-                *writeBuffer |= (uint8_t)pow((double)2, (double)(7 - *bufferIndex));
+                *writeBuffer |= (uint8_t)(1 << (7 - *bufferIndex));
             }
             (*bufferIndex)++;
             if(codeIndex < code.length()){
@@ -363,7 +362,7 @@ void decompress(){
                 readBuffer = (uint8_t)gottenChar;
                 bufferIndex = 0;
             }
-            if((readBuffer & (uint8_t)pow((double)2, (double)(7 - bufferIndex))) == (uint8_t)pow((double)2, (double)(7 - bufferIndex))){
+            if((readBuffer & (uint8_t)(1 << (7 - bufferIndex))) == (uint8_t)(1 << (7 - bufferIndex))){
                 code += '1';
             }
             else{
@@ -408,7 +407,7 @@ void decompress(){
         IFStream.get(gottenChar);
         readBuffer = (uint8_t)gottenChar;
         for(bufferIndex = 0; bufferIndex < 8; bufferIndex++){
-            if((readBuffer & (uint8_t)pow((double)2, (double)(7 - bufferIndex))) == (uint8_t)pow((double)2, (double)(7 - bufferIndex))){
+            if((readBuffer & (uint8_t)(1 << (7 - bufferIndex))) == (uint8_t)(1 << (7 - bufferIndex))){
                 head = head->right;
             }
             else{
